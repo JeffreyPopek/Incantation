@@ -8,6 +8,8 @@ public class SpeechRecognitionTest : MonoBehaviour {
     [SerializeField] private Button startButton;
     [SerializeField] private Button stopButton;
     [SerializeField] private TextMeshProUGUI text;
+    [SerializeField] private Dropdown dropdown;
+
 
     private AudioClip clip;
     private byte[] bytes;
@@ -17,6 +19,25 @@ public class SpeechRecognitionTest : MonoBehaviour {
         startButton.onClick.AddListener(StartRecording);
         stopButton.onClick.AddListener(StopRecording);
         stopButton.interactable = false;
+        
+        // foreach (var device in Microphone.devices)
+        // {
+        //     Debug.Log("Name: " + device);
+        // }
+        
+        foreach (var device in Microphone.devices)
+        {
+            dropdown.options.Add(new Dropdown.OptionData(device));
+        }
+        dropdown.onValueChanged.AddListener(ChangeMicrophone);
+            
+        var index = PlayerPrefs.GetInt("user-mic-device-index");
+        dropdown.SetValueWithoutNotify(index);
+    }
+    
+    private void ChangeMicrophone(int index)
+    {
+        PlayerPrefs.SetInt("user-mic-device-index", index);
     }
 
     private void Update() {
@@ -51,6 +72,11 @@ public class SpeechRecognitionTest : MonoBehaviour {
         HuggingFaceAPI.AutomaticSpeechRecognition(bytes, response => {
             text.color = Color.white;
             text.text = response;
+            
+            //Debug.Log(response);
+            GameManager.Instance.SetLastSaid(response);
+            
+            
             startButton.interactable = true;
         }, error => {
             text.color = Color.red;

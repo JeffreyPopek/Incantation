@@ -5,6 +5,8 @@ using UnityEngine;
 public class GameManager
 {
     private static GameManager instance;
+
+    private string gm_LastSaid = "";
     
     // Spellbook
     private Dictionary<string, int> SpellBook = new Dictionary<string, int>()
@@ -69,6 +71,17 @@ public class GameManager
 
         // If nothing is found then return 0
         return 0;
+    }
+
+    public void SetLastSaid(string lastSaid)
+    {
+        gm_LastSaid = lastSaid;
+        Debug.Log(gm_LastSaid);
+    }
+    
+    public string GetLastSaid()
+    {
+        return gm_LastSaid;
     }
 
 }
