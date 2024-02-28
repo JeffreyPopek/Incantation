@@ -24,18 +24,18 @@ public class BasicEnemy : MonoBehaviour
         
     }
 
-    void OnCollisionEnter (Collider target)
-    {
-        if(target.gameObject.tag.Equals("PlayerAttack"))
-        {
-            // Find which attack is what and apply damage
-            int totalDamage;
-            
-            // get spell tier + base damage
-            // call a "calculateDamage function
-            // take the damage
-        }
-    }
+    // private void OnCollisionEnter (Collider target)
+    // {
+    //     if(target.gameObject.tag.Equals("PlayerAttack"))
+    //     {
+    //         // Find which attack is what and apply damage
+    //         int totalDamage;
+    //         
+    //         // get spell tier + base damage
+    //         // call a "calculateDamage function
+    //         // take the damage
+    //     }
+    // }
 
 
     
