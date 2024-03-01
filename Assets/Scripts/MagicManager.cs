@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -5,6 +6,7 @@ using UnityEngine;
 public class MagicManager : MonoBehaviour
 {
     [SerializeField] private SpeechRecognitionTest speech;
+    [SerializeField] private GameObject _player;
     
     private static MagicManager instance;
 
@@ -53,8 +55,13 @@ public class MagicManager : MonoBehaviour
             return instance;
         }
     }
-    
-    
+
+
+    private void Awake()
+    {
+        _player.GetComponent<PlayerMagic>();
+    }
+
     private float CalculateDamage(string spellName, int playerIntelligenceLevel, int enemyDefence)
     {
         /*
@@ -96,7 +103,7 @@ public class MagicManager : MonoBehaviour
     public string GetSpellFromIncantation(string incantation)
     {
         int smallestDistance = 0;
-        int prevSmallestDistance = 1;
+        int prevSmallestDistance = 99999999;
         string keyToGet = "";
         
         foreach (var key in SpellBook.Keys) // loop through keys
@@ -110,12 +117,15 @@ public class MagicManager : MonoBehaviour
         }
         
         // If said incantation is too off from the original then don't do anything
-        if (smallestDistance > 30)
+        int incantationTolerance = 100;
+        if (smallestDistance > incantationTolerance)
         {
             // Tell player incantation has failed
             return null;
         }
         Debug.Log(SpellBook[keyToGet]);
+        
+        _player.GetComponent<PlayerMagic>().CastSpell();
         return SpellBook[keyToGet];
     }
 

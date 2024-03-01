@@ -5,16 +5,22 @@ using UnityEngine;
 public class PlayerStats : MonoBehaviour
 {
     
-    /*
-     damage = attack * attack / defense
-     attack = spell base damage + int level
-     */
     private int healthLevel, intelligenceLevel;
+    private float currentHP, maxHP, currentMana, maxMana, currentXP, maxXP;
+    
     // Start is called before the first frame update
     void Start()
     {
-        healthLevel = 10;
-        intelligenceLevel = 10;
+        // Set levels
+        healthLevel = 1;
+        intelligenceLevel = 1;
+        
+        // Set player values
+        maxHP = 10 + (healthLevel * 10);
+        maxMana = Random.Range(20, 100);
+        currentMana = maxMana;
+        
+        Debug.Log("Mana:" + currentMana);
     }
 
     // Update is called once per frame
@@ -27,4 +33,11 @@ public class PlayerStats : MonoBehaviour
     {
         // Get player stats from character creation
     }
+
+    private void LevelUp()
+    {
+        
+    }
+
+
 }

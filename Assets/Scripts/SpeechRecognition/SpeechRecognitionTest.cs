@@ -7,9 +7,9 @@ using UnityEngine.UI;
 
 
 public class SpeechRecognitionTest : MonoBehaviour {
-    [SerializeField] private Button startButton;
-    [SerializeField] private Button stopButton;
-    [SerializeField] private TextMeshProUGUI text;
+    // [SerializeField] private Button startButton;
+    // [SerializeField] private Button stopButton;
+    // [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Dropdown dropdown;
 
     private string lastSaid = "";
@@ -55,10 +55,10 @@ public class SpeechRecognitionTest : MonoBehaviour {
     }
 
     private void StartRecording() {
-        text.color = Color.white;
-        text.text = "Recording...";
-        startButton.interactable = false;
-        stopButton.interactable = true;
+        // text.color = Color.white;
+        // text.text = "Recording...";
+        // startButton.interactable = false;
+        // stopButton.interactable = true;
         clip = Microphone.Start(null, false, 10, 44100);
         recording = true;
     }
@@ -74,23 +74,23 @@ public class SpeechRecognitionTest : MonoBehaviour {
     }
 
     private void SendRecording() {
-        text.color = Color.yellow;
-        text.text = "Sending...";
-        stopButton.interactable = false;
+        // text.color = Color.yellow;
+        // text.text = "Sending...";
+        // stopButton.interactable = false;
         HuggingFaceAPI.AutomaticSpeechRecognition(bytes, response => {
-            text.color = Color.white;
-            text.text = response;
+            // text.color = Color.white;
+            // text.text = response;
             
             //Debug.Log(response);
             lastSaid = response;
             MagicManager.Instance.GetSpellFromIncantation(response);
             //Debug.Log(CalculateLevenshteinDistance(response, "Testing one two three"));
 
-            startButton.interactable = true;
+            //startButton.interactable = true;
         }, error => {
-            text.color = Color.red;
-            text.text = error;
-            startButton.interactable = true;
+            //text.color = Color.red;
+            //text.text = error;
+            //startButton.interactable = true;
         });
     }
 
