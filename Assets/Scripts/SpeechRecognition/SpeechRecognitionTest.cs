@@ -83,7 +83,7 @@ public class SpeechRecognitionTest : MonoBehaviour {
             
             //Debug.Log(response);
             lastSaid = response;
-            MagicManager.Instance.GetSpellFromIncantation(response);
+            MagicManager.Instance.CastSpell(response);
             //Debug.Log(CalculateLevenshteinDistance(response, "Testing one two three"));
 
             //startButton.interactable = true;
