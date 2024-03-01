@@ -1,8 +1,10 @@
+using System.Collections.Generic;
 using System.IO;
 using HuggingFace.API;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
+
 
 public class SpeechRecognitionTest : MonoBehaviour {
     [SerializeField] private Button startButton;
@@ -10,16 +12,13 @@ public class SpeechRecognitionTest : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI text;
     [SerializeField] private Dropdown dropdown;
 
+    private string lastSaid = "";
 
     private AudioClip clip;
     private byte[] bytes;
     private bool recording;
 
     private void Start() {
-        startButton.onClick.AddListener(StartRecording);
-        stopButton.onClick.AddListener(StopRecording);
-        stopButton.interactable = false;
-        
         // foreach (var device in Microphone.devices)
         // {
         //     Debug.Log("Name: " + device);
@@ -42,6 +41,15 @@ public class SpeechRecognitionTest : MonoBehaviour {
 
     private void Update() {
         if (recording && Microphone.GetPosition(null) >= clip.samples) {
+            StopRecording();
+        }
+
+        if (Input.GetMouseButtonDown(0))
+        {
+            StartRecording();
+        }
+        if (Input.GetMouseButtonUp(0))
+        {
             StopRecording();
         }
     }
@@ -74,9 +82,10 @@ public class SpeechRecognitionTest : MonoBehaviour {
             text.text = response;
             
             //Debug.Log(response);
-            GameManager.Instance.SetLastSaid(response);
-            
-            
+            lastSaid = response;
+            MagicManager.Instance.GetSpellFromIncantation(response);
+            //Debug.Log(CalculateLevenshteinDistance(response, "Testing one two three"));
+
             startButton.interactable = true;
         }, error => {
             text.color = Color.red;
@@ -109,4 +118,11 @@ public class SpeechRecognitionTest : MonoBehaviour {
             return memoryStream.ToArray();
         }
     }
+
+    string GetLastSaid()
+    {
+        return lastSaid;
+    }
+    
+   
 }
