@@ -64,7 +64,6 @@ public class PlayerStatsUIManager : MonoBehaviour
     {
         if (currentMana - manaCost < 0)
         {
-            ShowNoManaText();
             return;
         }
         currentMana -= manaCost;
@@ -85,10 +84,20 @@ public class PlayerStatsUIManager : MonoBehaviour
         currentHealth = Mathf.Clamp(currentHealth, 0, 100);
         
         healthNumbers.text = currentHealth.ToString() + " / " + maxHealth;
-        manaNumbers.text = currentMana.ToString() + " / " + maxMana;
 
         healthBar.fillAmount = currentHealth / maxHealth;
     }
+    
+    public void RestoreMana(float amount)
+    {
+        currentMana += amount;
+        currentMana = Mathf.Clamp(currentMana, 0, 100);
+        
+        manaNumbers.text = currentMana.ToString() + " / " + maxMana;
+
+        manaBar.fillAmount = currentMana / maxMana;
+    }
+    
     void Update()
     {
         
@@ -113,21 +122,5 @@ public class PlayerStatsUIManager : MonoBehaviour
         {
             Heal(1);
         }
-    }
-
-    public void ShowNoManaText()
-    {
-        Debug.Log("Not enough mana");
-
-        StartCoroutine(NoManaCoRoutine());
-    }
-    
-    IEnumerator NoManaCoRoutine()
-    { 
-        // noManaText.text = "Not enough mana to cast that";
-
-        yield return new WaitForSeconds(1);
-        
-        //noManaText.text = ".";
     }
 }

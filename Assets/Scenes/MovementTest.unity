@@ -2445,7 +2445,7 @@ PrefabInstance:
     - target: {fileID: 4787374763737722854, guid: 6e3f49420600ea84785cf0cf07cfd10c,
         type: 3}
       propertyPath: spellBook.Array.size
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 4787374763737722854, guid: 6e3f49420600ea84785cf0cf07cfd10c,
         type: 3}
@@ -2464,6 +2464,12 @@ PrefabInstance:
       propertyPath: spellBook.Array.data[2]
       value: 
       objectReference: {fileID: 6434392471012854068, guid: 8f3dfb1673b921046909a86bf4ed4c0e,
+        type: 3}
+    - target: {fileID: 4787374763737722854, guid: 6e3f49420600ea84785cf0cf07cfd10c,
+        type: 3}
+      propertyPath: spellBook.Array.data[3]
+      value: 
+      objectReference: {fileID: 6434392471012854068, guid: ba6443a99efbe174ea96a665fa6e4851,
         type: 3}
     - target: {fileID: 4949098156908048959, guid: 6e3f49420600ea84785cf0cf07cfd10c,
         type: 3}

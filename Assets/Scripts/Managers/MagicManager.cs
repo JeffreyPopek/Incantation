@@ -27,7 +27,8 @@ public class MagicManager : MonoBehaviour
         // Key is the incantation, value is the spell name
         {"Firebolt", "Firebolt"},
         {"O raging fire, offer us a great and blazing gift. Fireball", "Fireball"},
-        {"I call a refreshing burbling stream here and now. Water Ball", "Waterball"}
+        {"I call a refreshing burbling stream here and now. Water Ball", "Waterball"},
+        {"Please heal this guy. Light Healing", "LightHealing"}
     };
     
 
