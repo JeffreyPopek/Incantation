@@ -8,11 +8,33 @@ using TMPro;
 
 public class PlayerStatsUIManager : MonoBehaviour
 {
+    private static PlayerStatsUIManager instance;
+    
     [SerializeField] private Image healthBar, manaBar;
     [SerializeField] private TextMeshProUGUI healthNumbers, manaNumbers;
+    
+    // not enough mana (temp)
+    //[SerializeField] private TextMeshProUGUI noManaText;
 
     private float currentHealth, currentMana, maxHealth, maxMana;
-    
+
+    private PlayerStatsUIManager()
+    {
+        instance = this;
+    }
+
+    public static PlayerStatsUIManager Instance
+    {
+        get
+        {
+            if (instance == null)
+            {
+                instance = new PlayerStatsUIManager();
+            }
+
+            return instance;
+        }
+    }
 
     private void Start()
     {
@@ -25,6 +47,8 @@ public class PlayerStatsUIManager : MonoBehaviour
         // Set health and mana values for text
         healthNumbers.text = currentHealth.ToString() + " / " + maxHealth;
         manaNumbers.text = currentMana.ToString() + " / " + maxMana;
+
+        //noManaText.text = ". ";
     }
 
     public void TakeDamage(float damage)
@@ -32,9 +56,27 @@ public class PlayerStatsUIManager : MonoBehaviour
         currentHealth -= damage;
         
         healthNumbers.text = currentHealth.ToString() + " / " + maxHealth;
-        manaNumbers.text = currentMana.ToString() + " / " + maxMana;
         
         healthBar.fillAmount = currentHealth / maxHealth;
+    }
+    
+    public void UseMana(float manaCost)
+    {
+        if (currentMana - manaCost < 0)
+        {
+            ShowNoManaText();
+            return;
+        }
+        currentMana -= manaCost;
+        
+        manaNumbers.text = currentMana.ToString() + " / " + maxMana;
+        
+        manaBar.fillAmount = currentMana / maxMana;
+    }
+
+    public float GetCurrentMana()
+    {
+        return currentMana;
     }
 
     public void Heal(float healingAmount)
@@ -71,5 +113,20 @@ public class PlayerStatsUIManager : MonoBehaviour
         {
             Heal(1);
         }
+    }
+
+    public void ShowNoManaText()
+    {
+
+        StartCoroutine(NoManaCoRoutine());
+    }
+    
+    IEnumerator NoManaCoRoutine()
+    { 
+        // noManaText.text = "Not enough mana to cast that";
+
+        yield return new WaitForSeconds(1);
+        
+        //noManaText.text = ".";
     }
 }

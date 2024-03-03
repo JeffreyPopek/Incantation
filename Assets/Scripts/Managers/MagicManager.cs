@@ -2,6 +2,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Numerics;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class MagicManager : MonoBehaviour
@@ -53,7 +54,18 @@ public class MagicManager : MonoBehaviour
     public void CastSpell(string incantation)
     {
         GetSpellFromIncantation(incantation);
-        Instantiate(spellToCast, castPoint.position, castPoint.rotation);
+
+        if (PlayerStatsUIManager.Instance.GetCurrentMana() > spellToCast.GetComponent<BaseSpell>().manaCost)
+        {
+            PlayerStatsUIManager.Instance.UseMana(GetManaCost(spellToCast.GetComponent<BaseSpell>()));
+            Instantiate(spellToCast, castPoint.position, castPoint.rotation);
+        }
+        
+    }
+
+    public float GetManaCost(BaseSpell spell)
+    {
+        return spell.manaCost;
     }
     
     public float CalculateDamage(BaseSpell spell, int playerIntelligenceLevel)
@@ -98,11 +110,12 @@ public class MagicManager : MonoBehaviour
         }
         
         // If said incantation is too off from the original then don't do anything
-        int incantationTolerance = 100;
+        int incantationTolerance = 30;
         if (smallestDistance > incantationTolerance)
         {
             // Tell player incantation has failed
-            //return null;
+            //Debug.Log("No matching incantation");
+            //return;
         }
         Debug.Log("Casting: " + SpellBook[keyToGet]);
 

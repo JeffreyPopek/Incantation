@@ -29,7 +29,8 @@ public class PlayerStatsManager : MonoBehaviour
         }
     }
 
-    private void Start()
+
+    public void Awake()
     {
         // Set levels
         healthLevel = 1;
@@ -41,6 +42,11 @@ public class PlayerStatsManager : MonoBehaviour
         maxMana = 20;
         //maxMana = Random.Range(20, 100);
         currentMana = maxMana;
+    }
+
+    private void Start()
+    {
+
     }
     
     public float GetCurrentHealth()

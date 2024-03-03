@@ -727,7 +727,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b8a1cff642e0ed0479547ad69fb152ac, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  castPoint: {fileID: 140653011}
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -4245,6 +4244,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1701556870}
   - component: {fileID: 1701556869}
+  - component: {fileID: 1701556871}
   m_Layer: 0
   m_Name: PlayerStatsManager
   m_TagString: Untagged
@@ -4264,7 +4264,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9b4b7dd2c346874c9ac1c58fecf4d43, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  _player: {fileID: 0}
+  _player: {fileID: 291630165}
 --- !u!4 &1701556870
 Transform:
   m_ObjectHideFlags: 0
@@ -4280,6 +4280,22 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1701556871
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1701556868}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 72820eb29b162a8449cc2e08ffd1bb38, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBar: {fileID: 772866932}
+  manaBar: {fileID: 1448977942}
+  healthNumbers: {fileID: 538279629}
+  manaNumbers: {fileID: 1168525504}
 --- !u!1 &1729225290
 GameObject:
   m_ObjectHideFlags: 0
