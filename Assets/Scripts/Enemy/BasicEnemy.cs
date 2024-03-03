@@ -1,42 +1,50 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.AI;
+using TMPro;
 
 public class BasicEnemy : MonoBehaviour
 {
-    private int healthLevel;
-    private int currentHealth, MaxHealth;
+    private float healthLevel;
+    private float currentHealth, maxHealth;
 
+    // UI
+    [SerializeField] private FloatingHealthBar healthBar;
+    [SerializeField] private TextMeshProUGUI healthValueText;
 
-
-    // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        MaxHealth = healthLevel + 10;
-        currentHealth = MaxHealth;
+        currentHealth = 10;
+        maxHealth = currentHealth;
         
-        
+        healthBar.GetComponentInChildren<FloatingHealthBar>();
+        healthBar.UpdateHealthbar(currentHealth, maxHealth);
+
+        healthValueText.text = currentHealth.ToString();
+
     }
 
-    // Update is called once per frame
-    void Update()
+    private void OnTriggerEnter(Collider other)
     {
-        
+        if (other.CompareTag("Magic"))
+        {
+            TakeDamage(MagicManager.Instance.CalculateDamage(other.GetComponent<BaseSpell>(), 1));
+        }
     }
 
-    // private void OnCollisionEnter (Collider target)
-    // {
-    //     if(target.gameObject.tag.Equals("PlayerAttack"))
-    //     {
-    //         // Find which attack is what and apply damage
-    //         int totalDamage;
-    //         
-    //         // get spell tier + base damage
-    //         // call a "calculateDamage function
-    //         // take the damage
-    //     }
-    // }
+    private void TakeDamage(float damage)
+    {
+        currentHealth -= damage;
+        
+        healthBar.UpdateHealthbar(currentHealth, maxHealth);
+        healthValueText.text = currentHealth.ToString();
 
+        if (currentHealth <= 0)
+        {
+            Destroy(this.gameObject);
+        }
 
-    
+    }
 }

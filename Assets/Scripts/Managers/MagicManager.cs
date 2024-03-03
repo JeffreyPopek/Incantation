@@ -55,10 +55,14 @@ public class MagicManager : MonoBehaviour
     {
         GetSpellFromIncantation(incantation);
 
-        if (PlayerStatsUIManager.Instance.GetCurrentMana() > spellToCast.GetComponent<BaseSpell>().manaCost)
+        if (PlayerStatsUIManager.Instance.GetCurrentMana() >= spellToCast.GetComponent<BaseSpell>().manaCost)
         {
             PlayerStatsUIManager.Instance.UseMana(GetManaCost(spellToCast.GetComponent<BaseSpell>()));
             Instantiate(spellToCast, castPoint.position, castPoint.rotation);
+        }
+        else
+        {
+            Debug.Log("YOU HAVE NO MANA");
         }
         
     }

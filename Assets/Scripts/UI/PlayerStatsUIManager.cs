@@ -117,6 +117,7 @@ public class PlayerStatsUIManager : MonoBehaviour
 
     public void ShowNoManaText()
     {
+        Debug.Log("Not enough mana");
 
         StartCoroutine(NoManaCoRoutine());
     }
