@@ -6,9 +6,9 @@ using UnityEngine.UI;
 using TMPro;
 
 
-public class PlayerStatsUIManager : MonoBehaviour
+public class PlayerStatsManager : MonoBehaviour
 {
-    private static PlayerStatsUIManager instance;
+    private static PlayerStatsManager instance;
     
     [SerializeField] private Image healthBar, manaBar;
     [SerializeField] private TextMeshProUGUI healthNumbers, manaNumbers;
@@ -16,20 +16,23 @@ public class PlayerStatsUIManager : MonoBehaviour
     // not enough mana (temp)
     //[SerializeField] private TextMeshProUGUI noManaText;
 
-    private float currentHealth, currentMana, maxHealth, maxMana;
+    
+    // Player Stats
+    private int healthLevel, intelligenceLevel;
+    private float currentHealth, maxHealth, currentMana, maxMana;
 
-    private PlayerStatsUIManager()
+    private PlayerStatsManager()
     {
         instance = this;
     }
 
-    public static PlayerStatsUIManager Instance
+    public static PlayerStatsManager Instance
     {
         get
         {
             if (instance == null)
             {
-                instance = new PlayerStatsUIManager();
+                instance = new PlayerStatsManager();
             }
 
             return instance;
@@ -38,17 +41,20 @@ public class PlayerStatsUIManager : MonoBehaviour
 
     private void Start()
     {
-        // Set health and mana values in bar image
-        currentHealth = PlayerStatsManager.Instance.GetCurrentHealth();
-        currentMana = PlayerStatsManager.Instance.GetCurrentMana();
-        maxHealth = currentHealth;
-        maxMana = currentMana;
+        // Set levels
+        healthLevel = 1;
+        intelligenceLevel = 1;
+        
+        // Set player values
+        maxHealth = 10 + (healthLevel * 10);
+        currentHealth = maxHealth;
+        maxMana = 20;
+        //maxMana = Random.Range(20, 100);
+        currentMana = maxMana;
 
         // Set health and mana values for text
         healthNumbers.text = currentHealth.ToString() + " / " + maxHealth;
         manaNumbers.text = currentMana.ToString() + " / " + maxMana;
-
-        //noManaText.text = ". ";
     }
 
     public void TakeDamage(float damage)
@@ -91,7 +97,7 @@ public class PlayerStatsUIManager : MonoBehaviour
     public void RestoreMana(float amount)
     {
         currentMana += amount;
-        currentMana = Mathf.Clamp(currentMana, 0, 100);
+        //currentMana = Mathf.Clamp(currentMana, 0, 100);
         
         manaNumbers.text = currentMana.ToString() + " / " + maxMana;
 

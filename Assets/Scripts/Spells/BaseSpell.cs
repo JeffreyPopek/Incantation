@@ -6,6 +6,11 @@ using UnityEngine;
 [RequireComponent(typeof(Rigidbody))]
 public abstract class BaseSpell : MonoBehaviour
 {
+    // public struct Elements
+    // {
+    //     private int FIRE;
+    //     private int 
+    // }
     private bool hasLearnt;
     private string name;
     public float baseDamage;

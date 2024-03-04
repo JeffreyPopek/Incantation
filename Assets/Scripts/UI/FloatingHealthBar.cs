@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -11,6 +12,7 @@ public class FloatingHealthBar : MonoBehaviour
         private Camera cam;
         [SerializeField] private Transform target;
         [SerializeField] private Vector3 offset;
+        
     
         private void Start()
         {

@@ -37,6 +37,12 @@ public class Fireball : BaseSpell
         // apply spell effect to whatever we hit
         // particle effect of hit, sound, and damage
         Debug.Log(MagicManager.Instance.CalculateDamage(this, 1));
+        Explode();
         Destroy(this.gameObject);
+    }
+
+    private void Explode()
+    {
+        
     }
 }

@@ -3,17 +3,18 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightHealing : BaseSpell
+public class Teleport : BaseSpell
 {
     private void Awake()
     {
-        name = "LightHealing";
+        name = "Teleport";
         // set values in the editor
     }
 
     private void Start()
     {
-        PlayerStatsManager.Instance.Heal(5f);
+        MagicManager.Instance.SetTeleportPosition(1);
+        MagicManager.Instance.SetPlayerPosition();
         Destroy(this.gameObject);
     }
 

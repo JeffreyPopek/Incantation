@@ -4,11 +4,14 @@ using System.Collections.Generic;
 using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
+using Vector3 = UnityEngine.Vector3;
 
 public class MagicManager : MonoBehaviour
 {
     // Cast point for the player
     [SerializeField] private Transform castPoint;
+    [SerializeField] private GameObject _player;
+    [SerializeField] private Transform teleportPoint;
 
 
     [SerializeField] private SpeechRecognitionTest speech;
@@ -21,17 +24,38 @@ public class MagicManager : MonoBehaviour
 
     private GameObject spellToCast;
 
+    private float distance = 5f;
+
     // Spellbook
     private Dictionary<string, string> SpellBook = new Dictionary<string, string>()
     {
         // Key is the incantation, value is the spell name
-        {"Firebolt", "Firebolt"},
+        {"Bolt of flame. Firebolt", "Firebolt"},
         {"O raging fire, offer us a great and blazing gift. Fireball", "Fireball"},
         {"I call a refreshing burbling stream here and now. Water Ball", "Waterball"},
-        {"Please heal this guy. Light Healing", "LightHealing"}
+        {"Restore my strength. Light Healing", "LightHealing"},
+        {"I call forth the Arcane Gateway to transport me. Teleport", "Teleport"},
+        {"Give me some mana. Greater Mana Restoration", "GreaterManaRestoration"}
     };
-    
 
+
+    public void SetPlayerPosition()
+    {
+        _player.transform.position = teleportPoint.transform.position;
+    }
+    
+    public void SetTeleportPosition(int choice)
+    {
+        if (choice == 1)
+        {
+            teleportPoint.transform.position += _player.transform.forward * distance;
+            //teleportPoint.transform.position = teleportPoint.transform.position + new Vector3(5, 0, 5);
+        }
+        else if (choice == 2)
+        {
+            teleportPoint.transform.position = teleportPoint.transform.position - new Vector3(5, 10, 5);
+        }
+    }
 
  
     private MagicManager() {
@@ -56,9 +80,9 @@ public class MagicManager : MonoBehaviour
     {
         GetSpellFromIncantation(incantation);
 
-        if (PlayerStatsUIManager.Instance.GetCurrentMana() >= spellToCast.GetComponent<BaseSpell>().manaCost)
+        if (PlayerStatsManager.Instance.GetCurrentMana() >= spellToCast.GetComponent<BaseSpell>().manaCost)
         {
-            PlayerStatsUIManager.Instance.UseMana(GetManaCost(spellToCast.GetComponent<BaseSpell>()));
+            PlayerStatsManager.Instance.UseMana(GetManaCost(spellToCast.GetComponent<BaseSpell>()));
             Instantiate(spellToCast, castPoint.position, castPoint.rotation);
         }
         else

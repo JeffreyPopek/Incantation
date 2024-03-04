@@ -3,17 +3,17 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LightHealing : BaseSpell
+public class GreaterManaRestoriation : BaseSpell
 {
     private void Awake()
     {
-        name = "LightHealing";
+        name = "GreaterManaRestoriation";
         // set values in the editor
     }
 
     private void Start()
     {
-        PlayerStatsManager.Instance.Heal(5f);
+        PlayerStatsManager.Instance.RestoreMana(100f);
         Destroy(this.gameObject);
     }
 
