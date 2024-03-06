@@ -36,7 +36,8 @@ public class MagicManager : MonoBehaviour
         {"Restore my strength. Light Healing", "LightHealing"},
         {"I call forth the Arcane Gateway to transport me. Teleport", "Teleport"},
         {"Give me some mana. Greater Mana Restoration", "GreaterManaRestoration"},
-        {"Speed up time. Turn Time", "TurnTime"}
+        {"Speed up time. Turn Time", "TurnTime"},
+        {"Blast my enemies away. Sonic Blast", "SonicBlast"}
     };
 
 
