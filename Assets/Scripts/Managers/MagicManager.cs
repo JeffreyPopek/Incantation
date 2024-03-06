@@ -30,12 +30,13 @@ public class MagicManager : MonoBehaviour
     private Dictionary<string, string> SpellBook = new Dictionary<string, string>()
     {
         // Key is the incantation, value is the spell name
-        {"Bolt of flame. Firebolt", "Firebolt"},
+        {"Firebolt", "Firebolt"},
         {"O raging fire, offer us a great and blazing gift. Fireball", "Fireball"},
         {"I call a refreshing burbling stream here and now. Water Ball", "Waterball"},
         {"Restore my strength. Light Healing", "LightHealing"},
         {"I call forth the Arcane Gateway to transport me. Teleport", "Teleport"},
-        {"Give me some mana. Greater Mana Restoration", "GreaterManaRestoration"}
+        {"Give me some mana. Greater Mana Restoration", "GreaterManaRestoration"},
+        {"Speed up time. Turn Time", "TurnTime"}
     };
 
 
