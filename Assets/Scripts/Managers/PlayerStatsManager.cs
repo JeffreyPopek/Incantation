@@ -5,7 +5,6 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-
 public class PlayerStatsManager : MonoBehaviour
 {
     private static PlayerStatsManager instance;
@@ -19,6 +18,77 @@ public class PlayerStatsManager : MonoBehaviour
     
     // Player Stats
     private int healthLevel, intelligenceLevel;
+    
+    // Spell Ranks
+    enum SpellRanks
+    {
+        Novice = 1,
+        Intermediate = 2,
+        Advanced = 3,
+        Saint = 4,
+        King = 5,
+        Imperial = 6,
+        God = 7,
+    }
+    
+    private Dictionary<SpellRanks, int> RankRequirements = new Dictionary<SpellRanks, int>()
+    {
+        // Key is level requirement for rank promotion, value is spell rank
+        { SpellRanks.Novice, 1 },
+        { SpellRanks.Intermediate, 15 },
+        { SpellRanks.Advanced, 30 },
+        { SpellRanks.Saint, 60 },
+        { SpellRanks.King, 120 },
+        { SpellRanks.Imperial, 240 },
+        { SpellRanks.God, 500 }
+    };
+    
+    // Magic Ranks
+    private SpellRanks fireRank = SpellRanks.Novice;
+    private SpellRanks waterRank = SpellRanks.Novice;
+    private SpellRanks earthRank = SpellRanks.Novice;
+    private SpellRanks windRank = SpellRanks.Novice;
+
+    private int fireLevel = 15;
+    private int waterLevel = 1;
+    private int earthLevel = 1;
+    private int windLevel = 1;
+
+    private void CheckRankStatus(int currentLevel, SpellRanks currentRank)
+    {
+        Debug.Log("Evaluating Rank");
+        Debug.Log("Current Rank: " + fireRank);
+
+        int levelValue = 0;
+        SpellRanks newRank = SpellRanks.Novice;
+        
+        foreach (var key in RankRequirements.Keys) // loop through keys
+        {
+            if (currentRank == key)
+            {
+                levelValue = RankRequirements[key];
+                newRank = key + 1;
+                //break;
+            }
+        }
+
+        if (newRank == SpellRanks.Novice)
+        {
+            // Exit if no rank was found somehow
+            return;
+        }
+        
+        if (currentLevel >= levelValue)
+        {
+            fireRank = newRank;
+        }
+        else
+        {
+            Debug.Log("No promotion");
+        }
+    }
+    
+    // Current values
     private float currentHealth, maxHealth, currentMana, maxMana;
 
     private PlayerStatsManager()
@@ -106,6 +176,13 @@ public class PlayerStatsManager : MonoBehaviour
     
     void Update()
     {
+        // TEMP
+        if (Input.GetKeyDown(KeyCode.L))
+        {
+            CheckRankStatus(fireLevel, fireRank);
+            
+            Debug.Log("Fire rank: " + fireRank);
+        }
         
         if (Input.GetKeyDown(KeyCode.Escape))
         {

@@ -2544,7 +2544,7 @@ PrefabInstance:
     - target: {fileID: 4787374763737722854, guid: 6e3f49420600ea84785cf0cf07cfd10c,
         type: 3}
       propertyPath: spellBook.Array.size
-      value: 7
+      value: 8
       objectReference: {fileID: 0}
     - target: {fileID: 4787374763737722854, guid: 6e3f49420600ea84785cf0cf07cfd10c,
         type: 3}
@@ -2587,6 +2587,12 @@ PrefabInstance:
       propertyPath: spellBook.Array.data[6]
       value: 
       objectReference: {fileID: 6434392471012854068, guid: 8fa11a51ce62a6a48ae6f9cf80189789,
+        type: 3}
+    - target: {fileID: 4787374763737722854, guid: 6e3f49420600ea84785cf0cf07cfd10c,
+        type: 3}
+      propertyPath: spellBook.Array.data[7]
+      value: 
+      objectReference: {fileID: 6434392471012854068, guid: e180f14ec79dfd240a34c128922d7383,
         type: 3}
     - target: {fileID: 4949098156908048959, guid: 6e3f49420600ea84785cf0cf07cfd10c,
         type: 3}
@@ -9436,6 +9442,7 @@ GameObject:
   - component: {fileID: 1324644883}
   - component: {fileID: 1324644882}
   - component: {fileID: 1324644881}
+  - component: {fileID: 1324644887}
   m_Layer: 0
   m_Name: Enemy
   m_TagString: Untagged
@@ -9569,6 +9576,33 @@ Transform:
   - {fileID: 775155921}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!54 &1324644887
+Rigidbody:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1324644880}
+  serializedVersion: 4
+  m_Mass: 1
+  m_Drag: 0
+  m_AngularDrag: 0.05
+  m_CenterOfMass: {x: 0, y: 0, z: 0}
+  m_InertiaTensor: {x: 1, y: 1, z: 1}
+  m_InertiaRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ImplicitCom: 1
+  m_ImplicitTensor: 1
+  m_UseGravity: 1
+  m_IsKinematic: 0
+  m_Interpolate: 0
+  m_Constraints: 0
+  m_CollisionDetection: 0
 --- !u!4 &1344467031 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 2958202681067132388, guid: 35ae5bc525cf33f45b3aceb152db885b,
