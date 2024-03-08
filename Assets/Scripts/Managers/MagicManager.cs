@@ -41,11 +41,12 @@ public class MagicManager : MonoBehaviour
     };
 
 
+    // Teleport
     public void SetPlayerPosition()
     {
         _player.transform.position = teleportPoint.transform.position;
     }
-    
+
     public void SetTeleportPosition(int choice)
     {
         if (choice == 1)
@@ -59,10 +60,54 @@ public class MagicManager : MonoBehaviour
         }
     }
 
- 
+    public void GiveSpellXP(BaseSpell spell)
+    {
+        // give xp to that magic type
+        // check if rank up
+
+        SpellRanks tempRank = spell.GetThisSpellRank();
+        int xpToGet = PlayerStatsManager.Instance.GetSpellXP(tempRank);
+        Elements tempElement;
+
+        switch (spell._element)
+        {
+            case Elements.Fire:
+                Debug.Log("Giving Fire XP");
+                PlayerStatsManager.Instance.fireLevel += xpToGet;
+                tempElement = Elements.Fire;
+                break;
+            
+            case Elements.Water:
+                Debug.Log("Giving Water XP");
+                PlayerStatsManager.Instance.waterLevel += xpToGet;
+                tempElement = Elements.Water;
+                break;
+            
+            case Elements.Earth:
+                Debug.Log("Giving Earth XP");
+                PlayerStatsManager.Instance.earthLevel += xpToGet;
+                tempElement = Elements.Earth;
+                break;
+            
+            case Elements.Wind:
+                Debug.Log("Giving Wind XP");
+                PlayerStatsManager.Instance.windLevel += xpToGet;
+                tempElement = Elements.Wind;
+                break;
+            
+            default:
+                Debug.Log("No element found to give XP. Setting default type to fire");
+                tempElement = Elements.Fire;
+                break;
+        }
+
+        int levelToCheck = PlayerStatsManager.Instance.GetMagicTypeLevel(tempElement);
+        
+        PlayerStatsManager.Instance.CheckRankStatus(tempElement, tempRank);
+    }
+
+
     private MagicManager() {
-        // initialize your game manager here. Do not reference to GameObjects here (i.e. GameObject.Find etc.)
-        // because the game manager will be created before the objects
         instance = this;
     }    
  
@@ -86,6 +131,7 @@ public class MagicManager : MonoBehaviour
         {
             PlayerStatsManager.Instance.UseMana(GetManaCost(spellToCast.GetComponent<BaseSpell>()));
             Instantiate(spellToCast, castPoint.position, castPoint.rotation);
+            GiveSpellXP(spellToCast.GetComponent<BaseSpell>());
         }
         else
         {

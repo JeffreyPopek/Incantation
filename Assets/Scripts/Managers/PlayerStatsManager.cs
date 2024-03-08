@@ -5,31 +5,42 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
+// Spell Ranks
+public enum SpellRanks
+{
+    Novice,
+    Intermediate,
+    Advanced,
+    Saint,
+    King,
+    Imperial,
+    God,
+}
+
+// Spell Elements
+public enum Elements
+{
+    Fire, Water, Earth, Wind
+}
+
+public enum SpellRankXP
+{
+    Novice = 5,
+    Intermediate = 10,
+    Advanced = 30,
+    Saint = 100,
+    King = 500,
+    Imperial = 1000,
+    God = 5000
+}
+
+
 public class PlayerStatsManager : MonoBehaviour
 {
     private static PlayerStatsManager instance;
     
     [SerializeField] private Image healthBar, manaBar;
     [SerializeField] private TextMeshProUGUI healthNumbers, manaNumbers;
-    
-    // not enough mana (temp)
-    //[SerializeField] private TextMeshProUGUI noManaText;
-
-    
-    // Player Stats
-    private int healthLevel, intelligenceLevel;
-    
-    // Spell Ranks
-    enum SpellRanks
-    {
-        Novice = 1,
-        Intermediate = 2,
-        Advanced = 3,
-        Saint = 4,
-        King = 5,
-        Imperial = 6,
-        God = 7,
-    }
     
     private Dictionary<SpellRanks, int> RankRequirements = new Dictionary<SpellRanks, int>()
     {
@@ -43,48 +54,136 @@ public class PlayerStatsManager : MonoBehaviour
         { SpellRanks.God, 500 }
     };
     
+    // Player stats
+    private int healthLevel = 1;
     // Magic Ranks
     private SpellRanks fireRank = SpellRanks.Novice;
     private SpellRanks waterRank = SpellRanks.Novice;
     private SpellRanks earthRank = SpellRanks.Novice;
     private SpellRanks windRank = SpellRanks.Novice;
 
-    private int fireLevel = 15;
-    private int waterLevel = 1;
-    private int earthLevel = 1;
-    private int windLevel = 1;
+    public int fireLevel = 1;
+    public int waterLevel = 1;
+    public int earthLevel = 1;
+    public int windLevel = 1;
 
-    private void CheckRankStatus(int currentLevel, SpellRanks currentRank)
+    public void CheckRankStatus(Elements type, SpellRanks currentRank)
     {
         Debug.Log("Evaluating Rank");
         Debug.Log("Current Rank: " + fireRank);
 
-        int levelValue = 0;
+        int levelValue = GetMagicTypeLevel(type);
+        int levelRequirement = 0;
         SpellRanks newRank = SpellRanks.Novice;
         
         foreach (var key in RankRequirements.Keys) // loop through keys
         {
             if (currentRank == key)
             {
-                levelValue = RankRequirements[key];
                 newRank = key + 1;
-                //break;
+                Debug.Log("Next Rank:" + newRank);
+                levelRequirement = RankRequirements[newRank];
+                Debug.Log("int level:" + levelRequirement);
             }
         }
 
-        if (newRank == SpellRanks.Novice)
+        if (newRank == SpellRanks.Novice || levelRequirement == 0)
         {
-            // Exit if no rank was found somehow
+            // Exit if no rank was found or levelRequirement was not set
             return;
         }
         
-        if (currentLevel >= levelValue)
+        
+        if (levelValue == levelRequirement)
         {
-            fireRank = newRank;
+            // promote rank if level req is met
+            Debug.Log(type + " proficiency has increased to " + newRank);
+
+            // Get what element's level 
+            switch (type)
+            {
+                case Elements.Fire:
+                    fireRank = newRank;
+                    break;
+                    
+                case Elements.Water:
+                    waterRank = newRank;
+                    break;
+                    
+                case Elements.Earth:
+                    earthRank = newRank;
+                    break;
+                    
+                case Elements.Wind:
+                    windRank = newRank;
+                    break;
+            }
         }
         else
         {
-            Debug.Log("No promotion");
+            Debug.Log("No promotion in " + type);
+        }
+    }
+
+    public int GetMagicTypeLevel(Elements type)
+    {
+        switch (type)
+        {
+            case Elements.Fire:
+                return fireLevel;
+            
+            case Elements.Water:
+                return waterLevel;
+            
+            case Elements.Earth:
+                return earthLevel;
+            
+            case Elements.Wind:
+                return windLevel;
+            
+            default:
+                Debug.Log("Error no elemental magic type found");
+                return 0;
+        }
+    }
+
+    public int GetSpellXP(SpellRanks rank)
+    {
+        Debug.Log("spell rank: " + rank);
+        
+        switch (rank)
+        {
+            case SpellRanks.Novice:
+                Debug.Log("Getting XP: " + (int)SpellRankXP.Novice);
+                return (int)SpellRankXP.Novice;
+            
+            case SpellRanks.Intermediate:
+                Debug.Log("Getting XP: " + (int)SpellRankXP.Intermediate);
+                return (int)SpellRankXP.Intermediate;
+            
+            case SpellRanks.Advanced:
+                Debug.Log("Getting XP: " + (int)SpellRankXP.Advanced);
+                return (int)SpellRankXP.Advanced;
+            
+            case SpellRanks.Saint:
+                Debug.Log("Getting XP: " + (int)SpellRankXP.Saint);
+                return (int)SpellRankXP.Saint;
+            
+            case SpellRanks.King:
+                Debug.Log("Getting XP: " + (int)SpellRankXP.King);
+                return (int)SpellRankXP.King;
+            
+            case SpellRanks.Imperial:
+                Debug.Log("Getting XP: " + (int)SpellRankXP.Imperial);
+                return (int)SpellRankXP.Imperial;
+            
+            case SpellRanks.God:
+                Debug.Log("Getting XP: " + (int)SpellRankXP.God);
+                return (int)SpellRankXP.God;
+            
+            default:
+                Debug.Log("Getting XP: 0");
+                return 0;
         }
     }
     
@@ -113,8 +212,7 @@ public class PlayerStatsManager : MonoBehaviour
     {
         // Set levels
         healthLevel = 1;
-        intelligenceLevel = 1;
-        
+
         // Set player values
         maxHealth = 10 + (healthLevel * 10);
         currentHealth = maxHealth;
@@ -176,14 +274,6 @@ public class PlayerStatsManager : MonoBehaviour
     
     void Update()
     {
-        // TEMP
-        if (Input.GetKeyDown(KeyCode.L))
-        {
-            CheckRankStatus(fireLevel, fireRank);
-            
-            Debug.Log("Fire rank: " + fireRank);
-        }
-        
         if (Input.GetKeyDown(KeyCode.Escape))
         {
             if (Cursor.visible)

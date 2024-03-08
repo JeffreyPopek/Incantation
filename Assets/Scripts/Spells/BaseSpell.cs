@@ -19,10 +19,17 @@ public abstract class BaseSpell : MonoBehaviour
     public float speed;
     public float lifetime;
     public float radius;
+    public SpellRanks _spellRank;
+    public Elements _element;
 
     public virtual bool GetHasLearnt()
     {
         return hasLearnt;
+    }
+
+    public virtual SpellRanks GetThisSpellRank()
+    {
+        return _spellRank;
     }
 
     public virtual void SetHasLearnt()

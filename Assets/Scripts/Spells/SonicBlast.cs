@@ -17,6 +17,10 @@ public class SonicBlast : BaseSpell
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.isKinematic = true;
         
+        // Rank and element
+        _spellRank = SpellRanks.Intermediate;
+        _element = Elements.Wind;
+        
         //destroy after lifetime ends
         Destroy(this.gameObject, lifetime);
         Physics.IgnoreLayerCollision(6, 7);

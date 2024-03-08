@@ -16,6 +16,10 @@ public class Firebolt : BaseSpell
         _rigidbody = GetComponent<Rigidbody>();
         _rigidbody.isKinematic = true;
         
+        // Rank and element
+        _spellRank = SpellRanks.Novice;
+        _element = Elements.Fire;
+        
         //destroy after lifetime ends
         Destroy(this.gameObject, lifetime);
         Physics.IgnoreLayerCollision(6, 7);
