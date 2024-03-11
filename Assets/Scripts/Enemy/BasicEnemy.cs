@@ -8,6 +8,10 @@ using Random = UnityEngine.Random;
 
 public class BasicEnemy : MonoBehaviour
 {
+    // Damager Text
+    [SerializeField] private GameObject damageTextPrefab;
+    [SerializeField] private Transform damageTextSpawnLocation;
+    
     private int enemyLevel;
     private float currentHealth, maxHealth;
 
@@ -47,6 +51,11 @@ public class BasicEnemy : MonoBehaviour
         healthBar.UpdateHealthbar(currentHealth, maxHealth);
         healthValueText.text = currentHealth.ToString();
 
+        
+        // Show Damage Number
+        GameObject damageText = Instantiate(damageTextPrefab, damageTextSpawnLocation);
+        damageText.transform.GetChild(0).GetComponent<TextMeshPro>().SetText(damage.ToString());
+        
         if (currentHealth <= 0)
         {
             Destroy(this.gameObject);

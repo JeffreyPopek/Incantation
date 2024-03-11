@@ -5,34 +5,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using TMPro;
 
-// Spell Ranks
-public enum SpellRanks
-{
-    Novice,
-    Intermediate,
-    Advanced,
-    Saint,
-    King,
-    Imperial,
-    God,
-}
 
-// Spell Elements
-public enum Elements
-{
-    Fire, Water, Earth, Wind
-}
-
-public enum SpellRankXP
-{
-    Novice = 5,
-    Intermediate = 10,
-    Advanced = 30,
-    Saint = 100,
-    King = 500,
-    Imperial = 1000,
-    God = 5000
-}
 
 
 public class PlayerStatsManager : MonoBehaviour
@@ -56,11 +29,12 @@ public class PlayerStatsManager : MonoBehaviour
     
     // Player stats
     private int healthLevel = 1;
+    
     // Magic Ranks
-    private SpellRanks fireRank = SpellRanks.Novice;
-    private SpellRanks waterRank = SpellRanks.Novice;
-    private SpellRanks earthRank = SpellRanks.Novice;
-    private SpellRanks windRank = SpellRanks.Novice;
+    public SpellRanks fireRank { get; private set; } = SpellRanks.Novice; 
+    public SpellRanks waterRank { get; private set; } = SpellRanks.Novice;
+    public SpellRanks earthRank { get; private set; } = SpellRanks.Novice;
+    public SpellRanks windRank { get; private set; } = SpellRanks.Novice;
 
     public int fireLevel = 1;
     public int waterLevel = 1;
@@ -206,6 +180,11 @@ public class PlayerStatsManager : MonoBehaviour
 
             return instance;
         }
+    }
+
+    public void set()
+    {
+        fireRank = SpellRanks.God;
     }
 
     private void Start()

@@ -5,22 +5,13 @@ using UnityEngine;
 
 public class PlayerStats : MonoBehaviour
 {
-    struct Ranks
-    {
-        // 1-7, 1 is novice 7 is god
-        private int fireRank;
-        private int waterRank;
-        private int earthRank;
-        private int windRank;
-    }
-    private int healthLevel, intelligenceLevel;
+    private int healthLevel;
     private float currentHP, maxHP, currentMana, maxMana, currentXP, maxXP;
     
     private void Start()
     {
         // Set levels
         healthLevel = 1;
-        intelligenceLevel = 1;
         
         // Set player values
         maxHP = 10 + (healthLevel * 10);
@@ -29,7 +20,7 @@ public class PlayerStats : MonoBehaviour
         //maxMana = Random.Range(20, 100);
         currentMana = maxMana;
         
-        Debug.Log("Mana:" + currentMana);
+        //Debug.Log("Mana:" + currentMana);
     }
     
 
