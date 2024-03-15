@@ -27,11 +27,6 @@ public class SpellbookUIManager : MonoBehaviour
         {
             ToggleUI();
         }
-
-        if (Input.GetKeyDown(KeyCode.U))
-        {
-            PlayerStatsManager.Instance.set();
-        }
     }
 
     private void ToggleUI()

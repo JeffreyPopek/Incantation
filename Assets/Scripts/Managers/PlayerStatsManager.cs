@@ -12,8 +12,23 @@ public class PlayerStatsManager : MonoBehaviour
 {
     private static PlayerStatsManager instance;
     
-    [SerializeField] private Image healthBar, manaBar;
-    [SerializeField] private TextMeshProUGUI healthNumbers, manaNumbers;
+    //[Header("Player Stats Settings")]
+    [SerializeField] private Image healthBar, manaBar, staminaBar;
+    [SerializeField] private TextMeshProUGUI healthNumbers, manaNumbers, staminaNumbers;
+    
+   
+    
+    //[Header("Player Magic Settings")]
+    // Magic Ranks
+    public SpellRanks fireRank { get; private set; } = SpellRanks.Novice; 
+    public SpellRanks waterRank { get; private set; } = SpellRanks.Novice;
+    public SpellRanks earthRank { get; private set; } = SpellRanks.Novice;
+    public SpellRanks windRank { get; private set; } = SpellRanks.Novice;
+
+    public int fireLevel = 1;
+    public int waterLevel = 1;
+    public int earthLevel = 1;
+    public int windLevel = 1;
     
     private Dictionary<SpellRanks, int> RankRequirements = new Dictionary<SpellRanks, int>()
     {
@@ -27,19 +42,12 @@ public class PlayerStatsManager : MonoBehaviour
         { SpellRanks.God, 500 }
     };
     
+    // Player stamina
+    private float staminaDrainRate = 1f;
+    private float staminaRegenRate = 1f;
+
     // Player stats
     private int healthLevel = 1;
-    
-    // Magic Ranks
-    public SpellRanks fireRank { get; private set; } = SpellRanks.Novice; 
-    public SpellRanks waterRank { get; private set; } = SpellRanks.Novice;
-    public SpellRanks earthRank { get; private set; } = SpellRanks.Novice;
-    public SpellRanks windRank { get; private set; } = SpellRanks.Novice;
-
-    public int fireLevel = 1;
-    public int waterLevel = 1;
-    public int earthLevel = 1;
-    public int windLevel = 1;
 
     public void CheckRankStatus(Elements type, SpellRanks currentRank)
     {
@@ -162,7 +170,7 @@ public class PlayerStatsManager : MonoBehaviour
     }
     
     // Current values
-    private float currentHealth, maxHealth, currentMana, maxMana;
+    private float currentHealth, maxHealth, currentMana, maxMana, currentStamina, maxStamina;
 
     private PlayerStatsManager()
     {
@@ -182,11 +190,6 @@ public class PlayerStatsManager : MonoBehaviour
         }
     }
 
-    public void set()
-    {
-        fireRank = SpellRanks.God;
-    }
-
     private void Start()
     {
         // Set levels
@@ -199,9 +202,17 @@ public class PlayerStatsManager : MonoBehaviour
         //maxMana = Random.Range(20, 100);
         currentMana = maxMana;
 
+        currentStamina = 100;
+        maxStamina = currentStamina;
+
         // Set health and mana values for text
         healthNumbers.text = currentHealth.ToString() + " / " + maxHealth;
         manaNumbers.text = currentMana.ToString() + " / " + maxMana;
+        staminaNumbers.text = currentStamina.ToString() + " / " + maxStamina;
+        
+        healthBar.fillAmount = currentHealth / maxHealth;
+        manaBar.fillAmount = currentMana / maxMana;
+        staminaBar.fillAmount = currentStamina / maxStamina;
     }
 
     public void TakeDamage(float damage)
@@ -250,6 +261,15 @@ public class PlayerStatsManager : MonoBehaviour
 
         manaBar.fillAmount = currentMana / maxMana;
     }
+
+    public void StopRunning()
+    {
+        currentStamina += Time.deltaTime * staminaRegenRate;
+        
+        staminaNumbers.text = currentStamina.ToString() + " / " + maxStamina;
+        
+        staminaBar.fillAmount = currentStamina / maxStamina;
+    }
     
     void Update()
     {
@@ -274,5 +294,19 @@ public class PlayerStatsManager : MonoBehaviour
         {
             Heal(1);
         }
+    }
+
+    public void Run()
+    {
+        currentStamina -= Time.deltaTime * staminaDrainRate;
+        
+        staminaNumbers.text = currentStamina.ToString() + " / " + maxStamina;
+        
+        staminaBar.fillAmount = currentStamina / maxStamina;
+    }
+
+    public float GetStamina()
+    {
+        return currentStamina;
     }
 }
