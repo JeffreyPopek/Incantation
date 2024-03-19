@@ -36,10 +36,8 @@ public class PlayerController : MonoBehaviour
 
         bool isRunning = false;
         
-        if (PlayerStatsManager.Instance.GetStamina() > 0f && characterController.isGrounded)
-        {
-            isRunning = Input.GetKey(KeyCode.LeftShift);
-        }
+        isRunning = Input.GetKey(KeyCode.LeftShift);
+
         float curSpeedX = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Vertical") : 0;
         float curSpeedY = canMove ? (isRunning ? runningSpeed : walkingSpeed) * Input.GetAxis("Horizontal") : 0;
         float movementDirectionY = moveDirection.y;
@@ -52,12 +50,10 @@ public class PlayerController : MonoBehaviour
         }
         else if (!isRunning)
         {
-        	/*
-            while (PlayerStatsManager.Instance.GetStamina() != 100)
+            if (PlayerStatsManager.Instance.GetStamina() <= PlayerStatsManager.Instance.GetMaxStamina() - 0.01f)
             {
-                PlayerStatsManager.Instance.StopRunning();
+                PlayerStatsManager.Instance.RegenStamina();
             }
-            */
         }
 
         if (Input.GetButton("Jump") && canMove && characterController.isGrounded)

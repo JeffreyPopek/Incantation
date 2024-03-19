@@ -15,6 +15,7 @@ public class PlayerStatsManager : MonoBehaviour
     //[Header("Player Stats Settings")]
     [SerializeField] private Image healthBar, manaBar, staminaBar;
     [SerializeField] private TextMeshProUGUI healthNumbers, manaNumbers, staminaNumbers;
+    [SerializeField] private Image staminaObject;
     
    
     
@@ -43,8 +44,8 @@ public class PlayerStatsManager : MonoBehaviour
     };
     
     // Player stamina
-    private float staminaDrainRate = 1f;
-    private float staminaRegenRate = 1f;
+    private float staminaDrainRate = 10f;
+    private float staminaRegenRate = 10f;
 
     // Player stats
     private int healthLevel = 1;
@@ -213,6 +214,9 @@ public class PlayerStatsManager : MonoBehaviour
         healthBar.fillAmount = currentHealth / maxHealth;
         manaBar.fillAmount = currentMana / maxMana;
         staminaBar.fillAmount = currentStamina / maxStamina;
+        
+        // Hide stamina bar
+        //staminaObject.color = new Color(1, 1, 1, 0);
     }
 
     public void TakeDamage(float damage)
@@ -262,13 +266,18 @@ public class PlayerStatsManager : MonoBehaviour
         manaBar.fillAmount = currentMana / maxMana;
     }
 
-    public void StopRunning()
+    public void RegenStamina()
     {
+        if (currentStamina >= maxStamina)
+        {
+            currentStamina = 100;
+            return;
+        }
         currentStamina += Time.deltaTime * staminaRegenRate;
         
         staminaNumbers.text = currentStamina.ToString() + " / " + maxStamina;
         
-        staminaBar.fillAmount = currentStamina / maxStamina;
+        staminaBar.fillAmount = currentStamina / 100;
     }
     
     void Update()
@@ -294,10 +303,16 @@ public class PlayerStatsManager : MonoBehaviour
         {
             Heal(1);
         }
+        
+        
     }
 
     public void Run()
     {
+        if (currentStamina <= 0)
+        {
+            return;
+        }
         currentStamina -= Time.deltaTime * staminaDrainRate;
         
         staminaNumbers.text = currentStamina.ToString() + " / " + maxStamina;
@@ -308,5 +323,10 @@ public class PlayerStatsManager : MonoBehaviour
     public float GetStamina()
     {
         return currentStamina;
+    }
+    
+    public float GetMaxStamina()
+    {
+        return maxStamina;
     }
 }
