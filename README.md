@@ -1,2 +1,2 @@
-# ShoutCast
+# Incantation
  funny yelling game
