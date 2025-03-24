@@ -40,7 +40,7 @@ public class Firebolt : BaseSpell
     {
         // apply spell effect to whatever we hit
         // particle effect of hit, sound, and damage
-        Debug.Log(MagicManager.Instance.CalculateDamage(this, 1));
+        // Debug.Log(MagicManager.Instance.CalculateDamage(this, 1));
         Destroy(this.gameObject);
     }
 }

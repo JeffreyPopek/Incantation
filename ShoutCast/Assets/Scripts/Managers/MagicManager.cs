@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Numerics;
 using Unity.VisualScripting;
 using UnityEngine;
+using UnityEngine.Serialization;
 using Vector3 = UnityEngine.Vector3;
 
 public class MagicManager : MonoBehaviour
@@ -11,8 +12,6 @@ public class MagicManager : MonoBehaviour
     // Cast point for the player
     [SerializeField] private Transform castPoint;
     [SerializeField] private GameObject _player;
-    //[SerializeField] private Transform teleportPoint;
-
 
     [SerializeField] private SpeechRecognitionTest speech;
 
@@ -20,45 +19,13 @@ public class MagicManager : MonoBehaviour
 
     private static MagicManager _instance;
 
-    private string gm_LastSaid = "";
+    private const string GmLastSaid = "";
 
     private GameObject _spellToCast;
 
-    private float _distance = 5f;
-
-    // Spellbook
-    private Dictionary<string, string> SpellBook = new Dictionary<string, string>()
-    {
-        // Key is the incantation, value is the spell name
-        {"Firebolt", "Firebolt"},
-        {"O raging fire, offer us a great and blazing gift. Fireball", "Fireball"},
-        {"I call a refreshing burbling stream here and now. Water Ball", "Waterball"},
-        {"Restore my strength. Light Healing", "LightHealing"},
-        {"I call forth the Arcane Gateway to transport me. Teleport", "Teleport"},
-        {"Give me some mana. Greater Mana Restoration", "GreaterManaRestoration"},
-        {"Speed up time. Turn Time", "TurnTime"},
-        {"Blast my enemies away. Sonic Blast", "SonicBlast"}
-    };
+    [SerializeField] private float distance = 5f;
 
 
-    // Teleport
-    // public void SetPlayerPosition()
-    // {
-    //     _player.transform.position = teleportPoint.transform.position;
-    // }
-
-    // public void SetTeleportPosition(int choice)
-    // {
-    //     if (choice == 1)
-    //     {
-    //         teleportPoint.transform.position += _player.transform.forward * _distance;
-    //         //teleportPoint.transform.position = teleportPoint.transform.position + new Vector3(5, 0, 5);
-    //     }
-    //     else if (choice == 2)
-    //     {
-    //         teleportPoint.transform.position = teleportPoint.transform.position - new Vector3(5, 10, 5);
-    //     }
-    // }
 
     public void GiveSpellXP(BaseSpell spell)
     {
@@ -115,30 +82,71 @@ public class MagicManager : MonoBehaviour
     {
         get {
             if(_instance==null) 
-            {
                 _instance = new MagicManager();
-            }
- 
+
             return _instance;
         }
     }
-
+    
+    private readonly Dictionary<string, string> _spellBook = new Dictionary<string, string>()
+    {
+        // Key is the incantation, value is the spell name
+        {"This is going to shoot a fireball", "Fireball spell"},
+        {"I'm going to spawn a rock", "Rock Spell"},
+        {"I would like a glass of water", "Water Spell"}
+        
+    };
+    
     public void CastSpell(string incantation)
     {
         GetSpellFromIncantation(incantation);
+        if (_spellToCast == null)
+            return;
+        
+        //Instantiate(_spellToCast, castPoint.position, castPoint.rotation);
+    }
 
-        if (PlayerStatsManager.Instance.GetCurrentMana() >= _spellToCast.GetComponent<BaseSpell>().manaCost)
+    private void GetSpellFromIncantation(string incantation)
+    {
+        _spellToCast = null;
+
+        int prevSmallestDistance = int.MaxValue;
+        string keyToGet = "";
+        int threshold = 10;
+        
+        foreach (var key in _spellBook.Keys) // loop through keys
         {
-            PlayerStatsManager.Instance.UseMana(GetManaCost(_spellToCast.GetComponent<BaseSpell>()));
-            Instantiate(_spellToCast, castPoint.position, castPoint.rotation);
-            GiveSpellXP(_spellToCast.GetComponent<BaseSpell>());
-        }
-        else
-        {
-            Debug.Log("YOU HAVE NO MANA");
+            var smallestDistance = CalculateLevenshteinDistance(key, incantation);
+            if (smallestDistance < prevSmallestDistance) {
+                // The distances are within the threshold of each other
+                prevSmallestDistance = smallestDistance;
+                keyToGet = key;
+            }
         }
         
+        // check if spell is valid within threshold
+        if (prevSmallestDistance > threshold)
+        {
+            Debug.Log("No spell found...");
+            return;
+        }
+        
+        // Set spell prefab
+        _spellToCast = GetSpellGameObject(_spellBook[keyToGet]);
+        
+        Debug.Log("Casting: " + _spellBook[keyToGet]);
     }
+
+    
+    
+    // if (PlayerStatsManager.Instance.GetCurrentMana() >= _spellToCast.GetComponent<BaseSpell>().manaCost)
+    // {
+    //     //PlayerStatsManager.Instance.UseMana(GetManaCost(_spellToCast.GetComponent<BaseSpell>()));
+    //     Instantiate(_spellToCast, castPoint.position, castPoint.rotation);
+    //     GiveSpellXP(_spellToCast.GetComponent<BaseSpell>());
+    // }
+    // else
+    //     Debug.Log("YOU HAVE NO MANA");
 
     public float GetManaCost(BaseSpell spell)
     {
@@ -146,18 +154,9 @@ public class MagicManager : MonoBehaviour
     }
     
     public float CalculateDamage(BaseSpell spell, int playerIntelligenceLevel)
-    {
-        /*
-        damage = attack * attack / defense
-        attack = spell base damage + (int level / 2)
-        */
-        
+    { 
         float totalDamage = 0;
-
-       totalDamage = spell.baseDamage + playerIntelligenceLevel;
-        
-        // add enemy defence later
-        //        totalDamage = ((spellbaseDamage + (playerIntelligenceLevel / 2)) * 2) / enemyDefence;
+        totalDamage = spell.baseDamage + playerIntelligenceLevel;
 
         return totalDamage;
     }
@@ -165,40 +164,12 @@ public class MagicManager : MonoBehaviour
 
     public string GetLastSaid()
     {
-        return gm_LastSaid;
+        return GmLastSaid;
     }
     
     // Getting spell from voice
     
-    public void GetSpellFromIncantation(string incantation)
-    {
-        int smallestDistance = 0;
-        int prevSmallestDistance = 99999999;
-        string keyToGet = "";
-        
-        foreach (var key in SpellBook.Keys) // loop through keys
-        {
-            smallestDistance = CalculateLevenshteinDistance(key, incantation);
-            if (smallestDistance < prevSmallestDistance)
-            {
-                prevSmallestDistance = smallestDistance;
-                keyToGet = key;
-            }
-        }
-        
-        // If said incantation is too off from the original then don't do anything
-        int incantationTolerance = 30;
-        if (smallestDistance > incantationTolerance)
-        {
-            // Tell player incantation has failed
-            //Debug.Log("No matching incantation");
-            //return;
-        }
-        Debug.Log("Casting: " + SpellBook[keyToGet]);
 
-        // Get spell prefab
-        _spellToCast = GetSpellGameObject(SpellBook[keyToGet]);
-    }
 
     private GameObject GetSpellGameObject(string spellName)
     {
@@ -211,7 +182,7 @@ public class MagicManager : MonoBehaviour
             }
         }
         
-        Debug.Log("No Spell found in GetSpellGameObject()");
+       // Debug.Log("No Spell found in GetSpellGameObject()");
         return null;
     }
     
@@ -235,7 +206,7 @@ public class MagicManager : MonoBehaviour
         for (var i = 0; i <= source1Length; matrix[i, 0] = i++){}
         for (var j = 0; j <= source2Length; matrix[0, j] = j++){}
 
-        // Calculate rows and collumns distances
+        // Calculate rows and columns distances
         for (var i = 1; i <= source1Length; i++)
         {
             for (var j = 1; j <= source2Length; j++)
@@ -248,7 +219,6 @@ public class MagicManager : MonoBehaviour
             }
         }
         // return result
-        //Debug.Log(matrix[source1Length, source2Length]);
         return matrix[source1Length, source2Length];
     }
 }

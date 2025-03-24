@@ -1,0 +1,18 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<grammar xmlns="http://www.w3.org/2001/06/grammar" version="1.0" xml:lang="en-US" root="command">
+  <rule id="command">
+    <one-of>
+      <item>This is going to shoot a fireball</item>
+      <item>I'm going to spawn a rock</item>
+      <item>I would like a glass of water</item>
+      <item>This is not a registered spell</item>
+      <item>This is not going to work</item>
+      <item>Testing testing one two three</item>
+    </one-of>
+  </rule>
+</grammar>
+
+
+
+
+
